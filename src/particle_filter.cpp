@@ -50,7 +50,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
   }
   is_initialized = true;
 
-  //std::cout<<"1. init implemented"<<std::flush;
+  //std::cout<<"1. init() implemented"<<std::flush;
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[],
@@ -83,7 +83,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
        particles[i].y = y + velocity * delta_t * sin(theta);
      }
    }
-   //std::cout<<"2. prediction implemented"<<std::flush;
+   //std::cout<<"2. prediction() implemented"<<std::flush;
 }
 
 //void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted, vector<LandmarkObs>& observations) {
@@ -165,7 +165,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     weights[i] = particles[i].weight;
 
   }
-  //std::cout<<"3. updateWeights implemented"<<std::flush;
+  //std::cout<<"3. updateWeights() implemented"<<std::flush;
 }
 
 void ParticleFilter::resample() {
@@ -191,10 +191,10 @@ void ParticleFilter::resample() {
        new_particles[i] = particles[index];
 
     }
-    
+
     particles = new_particles;
 
-    //std::cout<<"4. resample implemented"<<std::flush;
+    //std::cout<<"4. resample() implemented"<<std::flush;
 }
 
 void ParticleFilter::SetAssociations(Particle& particle,
