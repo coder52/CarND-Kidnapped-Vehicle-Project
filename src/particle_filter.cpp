@@ -64,7 +64,9 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
    *  http://www.cplusplus.com/reference/random/default_random_engine/
    */
    std::default_random_engine gen;
+
    for(int i=0;i<num_particles;i++){
+
      normal_distribution<double> dist_x(particles[i].x, std_pos[0]);
      normal_distribution<double> dist_y(particles[i].y, std_pos[1]);
      normal_distribution<double> dist_theta(particles[i].theta, std_pos[2]);
@@ -115,13 +117,17 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
    int num_observation = observations.size();
    int num_landmarks = map_landmarks.landmark_list.size();
    double normalizer;
+
    for(int j=0;j<num_particles;j++){
+
      double x_part = particles[j].x;
      double y_part = particles[j].y;
      double theta = particles[j].theta;
      double x_map, y_map;
      int best_landmark;
+
      for(int i=0;i<num_observation;i++){
+
        double x_obs = observations[i].x;
        double y_obs = observations[i].y;
 
@@ -132,7 +138,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
        y_map = y_part + (sin(theta) * x_obs) + (cos(theta) * y_obs);
 
        double min_dist = sensor_range;
+
        for(int k=0;k<num_landmarks;k++){
+
          double distance = dist(x_map, y_map, map_landmarks.landmark_list[k].x_f,
                                               map_landmarks.landmark_list[k].y_f);
 
@@ -140,7 +148,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
            min_dist = distance;
            best_landmark = map_landmarks.landmark_list[k].id_i;
          }
+
        }
+
        particles[j].weight *= multiv_prob(std_landmark[0], std_landmark[1], x_map, y_map,
                              map_landmarks.landmark_list[best_landmark-1].x_f,
                              map_landmarks.landmark_list[best_landmark-1].y_f);
@@ -148,11 +158,14 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
      normalizer += particles[j].weight;
    }
-   //std::cout<<"3. updateWeights implemented"<<std::flush;
+
    for (int i = 0; i < num_particles; i++) {
+
     particles[i].weight /= normalizer;
     weights[i] = particles[i].weight;
+
   }
+  //std::cout<<"3. updateWeights implemented"<<std::flush;
 }
 
 void ParticleFilter::resample() {
@@ -167,14 +180,18 @@ void ParticleFilter::resample() {
    int index = rand() % num_particles;
    double beta = 0.0;
    double mw = *max_element(weights.begin(), weights.end());
+
    for(int i=0; i<num_particles; ++i){
+
        beta += (rand() / (RAND_MAX + 1.0)) * (2*mw);
        while(beta>weights[index]){
            beta -= weights[index];
            index = (index+1) % num_particles;
        }
        new_particles[i] = particles[index];
+
     }
+    
     particles = new_particles;
 
     //std::cout<<"4. resample implemented"<<std::flush;
